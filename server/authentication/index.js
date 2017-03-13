@@ -15,8 +15,8 @@ var ENABLED_AUTH_STRATEGIES = [
 module.exports = function (app) {
 
     // First, the session middleware will set/read sessions from the request.
-    // Our sessions will get stored in Mongo using the same connection from
-    // mongoose. Check out the sessions collection in your MongoCLI.
+    // The sessions will get stored in Mongo using the same connection from
+    // mongoose. Check out the sessions collection in  MongoCLI.
     app.use(session({
         secret: process.env.NODE_ENV === "production" ? process.env.SESSION_SECRET : "Optimus Prime is my real dad", //app.getValue('env').SESSION_SECRET,
         store: new MongoStore({mongooseConnection: mongoose.connection}),
@@ -29,18 +29,18 @@ module.exports = function (app) {
     app.use(passport.initialize());
     app.use(passport.session());
 
-    // When we give a cookie to the browser, it is just the userId (encrypted with our secret).
+    // When a cookie is given to the browser, it is just the userId (encrypted with our secret).
     passport.serializeUser(function (user, done) {
         done(null, user.id);
     });
 
-    // When we receive a cookie from the browser, we use that id to set our req.user
+    // When  a cookie is received from the browser, we use that id to set our req.user
     // to a user found in the database.
     passport.deserializeUser(function (id, done) {
         UserModel.findById(id, done);
     });
 
-    // We provide a simple GET /session in order to get session information directly.
+    // A  simple GET /session is provided in order to get session information directly.
     // This is used by the browser application (Angular) to determine if a user is
     // logged in already.
     //
